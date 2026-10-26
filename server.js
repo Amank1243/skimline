@@ -53,10 +53,14 @@ app.get('/api/weather', async (req, res) => {
 
 });
 
-
-
-
-
+// connecting to mongoose
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+        console.log('Connected to Skimline database!');
+    })
+    .catch((error) => {
+        console.error('MongoDB connection error:', error);
+    });
 
 app.listen(port, ()=>{
     console.log(`Server is running at http://localhost:${port}  :p`);
