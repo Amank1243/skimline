@@ -27,6 +27,6 @@ const beachSchema = new mongoose.Schema({
 });
 
 // Beach Model
-const Movie = mongoose.model('Beach', beachSchema);
+const Beach = mongoose.model('Beach', beachSchema);
 
-module.exports = Movie;
+module.exports = Beach;

@@ -2,6 +2,7 @@ const express = require('express'); //    docs: https://expressjs.com/
 const mongoose = require('mongoose'); // docs: https://mongoosejs.com/docs/
 const path = require('path'); // docs: https://nodejs.org/api/path.html
 const axios = require('axios'); // For API requests     docs: https://axios.rest/pages/getting-started/first-steps
+const Beach = require('./models/Beach');
 
 require('dotenv').config(); // Load variables from .env.
 
@@ -53,10 +54,33 @@ app.get('/api/weather', async (req, res) => {
 
 });
 
+// Retrieve all beaches from MongoDB
+app.get('/api/beaches', async (req, res) => {
+    try {
+        const beaches = await Beach.find();
+
+        res.json(beaches);
+
+    } catch (error) {
+        console.error('Error retrieving beaches:', error.message);
+
+        res.status(500).json({
+            error: 'Failed to retrieve beaches'
+        });
+    }
+});
+
 // connecting to mongoose
 mongoose.connect(process.env.MONGODB_URI)
-    .then(() => {
+    .then(async () => {
         console.log('Connected to Skimline database!');
+
+        console.log('Database:', mongoose.connection.name);
+        console.log('Host:', mongoose.connection.host);
+        console.log('Collection:', Beach.collection.name);
+
+         const count = await Beach.countDocuments();
+        console.log('Number of beaches:', count);
     })
     .catch((error) => {
         console.error('MongoDB connection error:', error);
